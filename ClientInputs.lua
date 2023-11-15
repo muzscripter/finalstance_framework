@@ -15,6 +15,9 @@ local PlayerGui = Player.PlayerGui
 Humanoid.WalkSpeed = 10
 local CustomMovement = require(script:WaitForChild('CustomMovement'))
 local HoldingWKey
+local ClientStates = {
+    ['Weapon Equipped'] = false
+}
 
 local InputBegan = coroutine.create(function()
 	UserInputService.InputBegan:Connect(function(ClientInput, GameProcessedEvent)
@@ -26,19 +29,26 @@ local InputBegan = coroutine.create(function()
 		end
 		
 		if ClientInput.KeyCode == Enum.KeyCode.E then
-			Input = 'Equip'
-			Info = {['Request'] = 'Katana', ['Input'] = 'Equip'}
+			Input = 'ChangeState'
+			Info = {['Request'] = 'Katana', ['Input'] = 'ChangeState', ['State'] = ClientStates['Weapon Equipped'] }
 
 			ReplicatedStorage.Remotes.RequestInput:FireServer(Input, Info)
-			
+
+            ClientStates['Weapon Equipped'] = not ClientStates['Weapon Equipped']
 		end
+
 		if ClientInput.UserInputType == Enum.UserInputType.MouseButton1 then
 			Input = 'M1'
-			Info = {['Request'] = 'M1', ['Input'] = 'M1'}
+			Info = {['Request'] = 'Katana', ['Input'] = 'M1'}
 
 			ReplicatedStorage.Remotes.RequestInput:FireServer(Input, Info)
 		end
 
+        if ClientInput.UserInputService == Enum.UserInputType.MouseButton2 then
+            Input = 'Heavy'
+            Info = {['Request'] = 'Katana', ['Input'] = 'Heavy'}
+        end
+        
 		if ClientInput.KeyCode == Enum.KeyCode.F then
 			Input = 'Block'
 			Info = {['Request'] = 'Block', ['Input'] = 'Block'}
