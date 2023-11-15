@@ -44,43 +44,52 @@ function Module.Setup(Player)
 	end
 end
 
-function Module.Equip(Player)
+function Module.ChangeState(Player: any, State: boolean)
 	local Humanoid = Player.Character.Humanoid
 	local Character = Player.Character
 	local HumanoidRootPart = Character.HumanoidRootPart
 	
 	if Character:FindFirstChild('Katana') then
-		local EquipTrack = Humanoid:LoadAnimation(game:GetService('ReplicatedStorage'):WaitForChild('EquipKatana'))
-		EquipTrack.Priority = Enum.AnimationPriority.Action4
-		
-		EquipTrack:Play()
-		
-		local Sound = game:GetService('ReplicatedStorage')["Sheathe / Unseathe"]:Clone()
-		Sound.PlayOnRemove = true
-		Sound.Volume = 1
-		Sound.Parent = Character
-		Sound:Destroy()
-		Sound = nil
-		
-		local Katana = Character:FindFirstChild('Katana')
-		local Katana2 = game:GetService('ReplicatedStorage'):WaitForChild('ref-graverealm2').Katana
-		local KatanaPart = Katana2:WaitForChild('Handle').ObjectValue.Value.Name
-		
-		local ExistingWeld = Katana.Handle:FindFirstChild("KatanaWeld")
-		if ExistingWeld then
-			
-			Katana.Handle.CFrame = KatanaPart * Katana.Handle.ObjectValue.Value.CFrame:Inverse() * Katana.Handle.CFrame
-			
-			ExistingWeld.Part0 = Katana.Handle
-			ExistingWeld.Part1 = KatanaPart
-		end
-		
-		Katana.Parent = Character
+        if State == true then
+            local EquipTrack = Humanoid:LoadAnimation(game:GetService('ReplicatedStorage'):WaitForChild('EquipKatana'))
+            EquipTrack.Priority = Enum.AnimationPriority.Action4
+            
+            EquipTrack:Play()
+            
+            local Sound = game:GetService('ReplicatedStorage')["Sheathe / Unseathe"]:Clone()
+            Sound.PlayOnRemove = true
+            Sound.Volume = 1
+            Sound.Parent = Character
+            Sound:Destroy()
+            Sound = nil
+            
+            local Katana = Character:FindFirstChild('Katana')
+            local Katana2 = game:GetService('ReplicatedStorage'):WaitForChild('ref-graverealm2').Katana
+            local KatanaPart = Katana2:WaitForChild('Handle').ObjectValue.Value.Name
+            
+            local ExistingWeld = Katana.Handle:FindFirstChild("KatanaWeld")
+            if ExistingWeld then
+                
+                Katana.Handle.CFrame = KatanaPart * Katana.Handle.ObjectValue.Value.CFrame:Inverse() * Katana.Handle.CFrame
+                
+                ExistingWeld.Part0 = Katana.Handle
+                ExistingWeld.Part1 = KatanaPart
+            end
+            
+            Katana.Parent = Character
+        elseif State == false then
+            print('[SERVER] Unequip weapon.')
+        end
+
+        return error('Failed to get proper state')
 	end
 	
 end
 
-function Module:Unequip()
-	
+function Module.M1()
 end
+
+function Module.Heavy()
+end
+
 return Module
